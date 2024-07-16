@@ -58,14 +58,14 @@
                             <ul class="submenu">
                                 {% for main_category in animal.main_categories.all %}
                                     <li class="submenu-item">
-                                        <a href="{% url 'main_category' main_category.id %}" class="border shadow">{{ main_category.name }}
+                                        <a href="{% url 'main_category' main_category.id %}" class="border rounded-3">{{ main_category.name }}
 
                                             <i class="bi bi-arrow-left text-end"></i>
                                         </a>
                                         <ul class="subsubmenu">
                                             {% for sub_category in main_category.sub_categories.all %}
                                                 <li class="subsubmenu-item">
-                                                    <a href="{% url 'sub_category' sub_category.id %}" class="border">{{ sub_category.name }}</a>
+                                                    <a href="{% url 'sub_category' sub_category.id %}" class="border rounded-3">{{ sub_category.name }}</a>
                                                 </li>
                                             {% endfor %}
                                         </ul>
