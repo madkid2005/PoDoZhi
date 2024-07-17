@@ -54,20 +54,23 @@ body.focused #search-suggestions {
     display: block;
 }
 /* NAVBAR PAIIN HOVER */
-
 nav {
-    background-color: #343a40;
-    padding: 1rem;
+    background: linear-gradient(45deg, #343a40, #495057);
+}
+
+.menu {
+    display: flex;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
 }
 
 .menu-item {
     position: relative;
-}
-
-.menu > .menu-item {
-    float: left;
     margin-right: 20px;
     color: white;
+    font-family: 'Arial', sans-serif;
+    font-size: 16px;
 }
 
 .menu a {
@@ -75,35 +78,47 @@ nav {
     color: white;
     padding: 10px 15px;
     display: block;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 4px;
 }
 
 .menu a:hover {
-    background-color: #495057;
+    background-color: #17a2b8;
+    color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.submenu, .subsubmenu {
+.submenu {
     display: none;
     position: absolute;
-    top: 100%;
-    right: 0;
+    right: 10%;
+    top: 94%;
     background: white;
     border: 1px solid #ccc;
     z-index: 1000;
     width: 200px;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-    animation: fadeIn 0.3s ease;
+    animation: slideInFromTop 0.3s ease;
+    border-radius: 4px;
+}
+
+.subsubmenu {
+    display: none;
+    position: absolute;
+    right: 100%;
+    top: 0%;
+    background: white;
+    border: 1px solid #ccc;
+    z-index: 1000;
+    width: 200px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    animation: slideInFromTop 0.3s ease;
+    border-radius: 4px;
 }
 
 .menu-item:hover > .submenu,
 .submenu-item:hover > .subsubmenu {
     display: block;
-}
-
-.menu {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
 }
 
 .submenu, .subsubmenu {
@@ -119,13 +134,18 @@ nav {
 
 .submenu a, .subsubmenu a {
     color: #343a40;
+    padding: 10px 15px;
+    display: block;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    border-radius: 4px;
 }
 
 .submenu a:hover, .subsubmenu a:hover {
-    background-color: #e9ecef;
+    background-color: #17a2b8;
+    color: white;
 }
 
-@keyframes fadeIn {
+@keyframes slideInFromTop {
     from {
         opacity: 0;
         transform: translateY(-10px);

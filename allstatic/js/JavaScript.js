@@ -44,10 +44,3 @@ items.forEach(item => {
         this.classList.remove('shadow');
     });
 });
-
-document.addEventListener('DOMContentLoaded', function() {
-  setTimeout(function() {
-      const logoContainer = document.querySelector('.logo-container');
-      logoContainer.style.display = 'none';
-  }, 3000); // 2 ثانیه انیمیشن + 1 ثانیه محو شدن
-});

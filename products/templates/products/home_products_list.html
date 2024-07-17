@@ -1,187 +1,283 @@
-{% extends "products/base.html" %}
-{% load static %}
-{% load custom_filters %}
-
-
-{% block style %}
-<style>
-    .zoom-effect-container {
-        position: relative;
-        overflow: hidden;
-    }
-    .zoom-effect-container img {
-        transform: scale(1.6);
-        transition: transform 0.5s ease;
-    }
-    .zoom-effect-container:hover img {
-        transform: scale(2.9);
-    }
-    
-</style>
-{% endblock %}
+{% extends 'products/base.html' %}    
 {% block body %}
 
-<!-- BANNER SLIDER  -->
-<section>
-    <div class="container-fluid mt-1">
-        <div class="row">
-            <div class="col-12 ">
-                <div id="carouselExampleIndicators" class="carousel slide">
-
-                    <div class="carousel-indicators">
-                        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-                        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
-                        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
-                    </div>
-
-                    <div class="carousel-inner">
-
-                        <a href="">
-                            <div class="carousel-item active">
-                                <img src="{% static 'img/slider1.jpg' %}" class="d-block w-100 img-fixed-height" alt="...">
-                            </div>
-                        </a>
-
-                        <a href="">
-                            <div class="carousel-item">
-                                <img src="{% static 'img/slider2.jpg' %}" class="d-block w-100 img-fixed-height" alt="...">
-                            </div>
-                        </a>
-
-                        <a href="">
-                            <div class="carousel-item">
-                                <img src="{% static 'img/slider3.jpg' %}" class="d-block w-100 img-fixed-height" alt="...">
-                            </div>
-                        </a>
-
-                    </div>
-
-                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
-                        <span class="carousel-control-prev-icon me-5" aria-hidden="true"></span>
-                        <span class="visually-hidden">Previous</span>
-                    </button>
-
-                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
-                        <span class="carousel-control-next-icon ms-5" aria-hidden="true"></span>
-                        <span class="visually-hidden">Next</span>
-                    </button>
-
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- DOG & CAT -->
-<div class="container-fluid bg-white mt-4 text-center">
-    <div class="row ">
-
-        <div class="col-12 col-md-6  position-relative UP ">
-            <a href="">
-                <div class="">
-                    <img  class="img-fluid UP" src="{% static 'img/catproducts.jpg' %}" alt="">
-                </div>               
-            </a>
-        </div>
-
-        <div class="col-12 col-md-6 DOWN position-relative ">
-            <a href="">
-                <div class=" ">
-                    <img class="img-fluid"  src="{% static 'img/dogproducts.jpg' %}" alt="">
-                </div>
-            </a>
-        </div>
-
-    </div>
-</div>
-
-<!-- products sliders -->
-<div class="container mt-3">
-    {% for animal_type_data in animal_types_with_subcategories %}
-        {% for subcategory_data in animal_type_data.subcategories_with_products %}
-            <div class="mx-4">
-                <p class="fw-bold">{{ subcategory_data.sub_category.name }}</p>
-            </div>
-
-            <div class="container mt-1">
-                <div class="owl-carousel border border-2 p-3 rounded-4 owl-theme bg-white shadow">
-                    {% for product_pair in subcategory_data.product_pairs %}
-                    {% for product in product_pair %}
-                        <div class="item rounded-4" style="">
-
-                            {% with first_image=product.images.first %}
-                            {% if first_image %}
-                                <div class="zoom-effect-container">
-                                    <img src="{{ first_image.image.url }}" alt="{{ product.name }}" class="img-fluid mt-1">
-                                </div>
-                            {% endif %}
-                            {% endwith %}
-
-                            <div class="product-details flex-grow-1 d-flex flex-column justify-content-between">
-                                <div class="product-name">
-                                    <small><small><small>{{ product.name|truncate_words:5 }}</small></small></small>
-                                </div>
-                            </div>
-
-                            <button class="btn btn-success mt-auto">
-                                <small><small>{{ product.price|format_price }} تومان</small></small> 
-                            </button>
-                        </div>
-                    {% endfor %}
-                    {% endfor %}
-                </div>
-            </div>
-
-            {% if forloop.counter|divisibleby:2 %}
-            <!-- banner slider  -->
-            <div class="container-fluid mt-1">
-                <div class="row">
-                    <div class="col-12 ">
-
-                        <div id="carouselExampleIndicators" class="carousel slide">
-                            <div class="carousel-inner">
-                                <a href="#">
-                                    <div class="carousel-item active">
-                                        <img src="{% static 'img/slider1.jpg' %}" class="d-block w-100 img-fixed-height" alt="...">
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
+<head>
+    <style>
+        .custom-pointer {
+            cursor: default; 
+        }
+        .custom-select {
+            background: linear-gradient(to bottom, rgba(255, 50, 50, 0.5), rgba(204, 0, 0, 1)); 
+            border: none;
+            border-radius: 5px;
+            color: #fff; 
+            padding: 4px 6px;
+        }
         
+        .custom-select option {
+            background-color: rgba(255, 51, 51, 0.8); 
+            color: #fff;
+        }
+        
+        .custom-select:hover {
+            background-color: rgba(100, 50, 50, 0.3); 
+        }
+        
+        .card-product {
+            background-color: #fff;
+            border-radius: 40px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+        }
+        
+        .card-product .btn {
+            border-radius: 40px;
+            font-weight: bold;
+            transition: all 0.6s ease;
+        }
+        
+        .card-product .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .carousel-item img {
+            border-radius: 15px;
+        }
+
+        .show-more {
+            cursor: pointer;
+            color: #ff3333; 
+            background-color: #fff
+        }
+
+        .show-more:hover {
+            text-decoration: underline;
+        }
+
+    </style>
+</head>
+
+<div class="container mt-5">
+
+    <div class="row shadow border border-1 rounded-5">
+        <div class="col-md-5">
+            <div id="carouselExampleDark" class="carousel carousel-dark slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    <div class="carousel-item {% if forloop.first %} active {% endif %} ">
+                        <img src="" class="d-block img-fluid rounded-5 mt-4" alt="Product Image">
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+        </div>
+        <div class="col-md-7 col-12">
+            <div class=" card-product my-3 mx-1">
+                <div class="card-body text-center">
+                    <h2 class="card-title">{{ product.name }}</h2>
+                    <h5 class="text-colorforbuyLow text-start mt-4"> <small>مشخصات:</small></h5>
+                    <h6 class="text-colorforbuy text-start"> دسته بندی : <span class="text-black">{{ product.category }}</span> </h6>
+                    <h6 class="text-colorforbuy text-start">سال تولید : <span class="text-black">۲۰۱۹</span></h6>
+                    <h6 class="text-colorforbuy text-start">کشور سازنده : <span class="text-black">آمریکا</span> </h6>
+                    <p class="card-text mt-3 text-end fw-bold ">
+                        <span class="text-colorforbuyLow text-color1"><small><s>{{ product.price }}</s></small></span>
+                        <span class="mx-1 text-black">{{ product.sale_price }}</span>
+
+                        <small class="text-black">تومان</small>
+                    </p>
+                    <input type="hidden" id="csrf_token" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+                    <div class="input-group input-group-sm my-3">
+                        <button class="btn btn-sm btn-outline-danger" type="button" onclick="increaseQuantity()">
+                            <i class="bi bi-plus"></i>
+                        </button>
+                        <select class="form-select select-smaller" id="qty-cart">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
+                        <button class="btn btn-sm btn-outline-danger" type="button" onclick="decreaseQuantity()">
+                            <i class="bi bi-dash"></i>
+                        </button>
+                        
+                    </div>
+                    
+                    <button class="btn btn-danger rounded-pill fw-bold py-2" type="button" value="{{ product.id }}" id="add-cart">افزودن به سبد خرید</button>
+                    <p class="text-muted mt-2">تعداد موجود در انبار: {{ product.inventory }}</p>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-5">
+        <div class="col-md-12 col-12">
+            <div class="card card-product shadow">
+                <div class="card-body">
+                    <h4 class="card-title ">توضیحات محصول:</h4>
+                    <div id="product-description">
+                        <p class="card-text">{{ product.description|truncatewords:9 }}</p>
+                        <button class="btn color1 show-more">نمایش بیشتر</button>
+                    </div>
+                    <div id="full-description" style="display: none;">
+                        <p class="card-text">{{ product.description }}</p>
+                        <button class="btn color1 show-less">نمایش کمتر</button>
                     </div>
                 </div>
             </div>
-            {% endif %}
-        {% endfor %}
-    {% endfor %}
-</div>
-
-
-
-<!-- 2 RED ROYALCANIN DOG-CAT -->
-<div class="container-fluid bg-white mt-4">
-    <div class="row ">
-
-        <div class="col-12 col-md-6  position-relative UP ">
-            <a href="">
-                <div class="">
-                    <img  class="img-fluid UP" src="{% static 'bnnrimg/bnnr2.webp' %}" alt="">
-                </div>               
-            </a>
         </div>
-
-        <div class="col-12 col-md-6 DOWN position-relative ">
-            <a href="">
-                <div class="">
-                    <img class="img-fluid"  src="{% static 'bnnrimg/bnnr3.webp' %}" alt="">
-                </div>
-            </a>
-        </div>
-
     </div>
+
+    <div class="row mt-5">
+        <div class="col-md-12">
+            <div class="card card-product shadow">
+                <div class="card-body">
+                    <h4 class="card-title">امتیاز و دیدگاه کاربران</h4>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p>امتیاز کالا : {{ product.average_rating }} از 5</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p>شما می‌توانید نظر های خود را درباره این کالا در باکس زیر ثبت کنید.</p>
+                            <form method="post" action="{% url 'add_review' product.id %}">
+                                
+                                <div class="rate d-flex">
+                                    <input type="radio" id="star5" name="rating" value="5" />
+                                    <label for="star5" title="5">5 stars</label>
+                                    <input type="radio" id="star4" name="rating" value="4" />
+                                    <label for="star4" title="4">4 stars</label>
+                                    <input type="radio" id="star3" name="rating" value="3" />
+                                    <label for="star3" title="3">3 stars</label>
+                                    <input type="radio" id="star2" name="rating" value="2" />
+                                    <label for="star2" title="2">2 stars</label>
+                                    <input type="radio" id="star1" name="rating" value="1" />
+                                    <label for="star1" title="1">1 star</label>
+                                </div>
+                                <div class="form-group shadow border border-3">
+                                    <label for="comment"> </label>
+                                    <textarea class="form-control" id="comment" name="comment" rows="3" required></textarea>
+                                </div>
+                                <button type="submit" class="btn color1 mt-3">ثبت دیدگاه</button>
+                            </form>
+                            <p class="fw-bold">ابتدا وارد شوید.</p>
+                            <form method="post" action="{% url 'register_view' %}">
+                                <input type="hidden" name="next" value="{{ request.GET.next }}">
+                                <button type="submit" class="btn btn-danger text-white">ورود | ثبت نام</button>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-12">
+                            <h5>نظرات کاربران:</h5>
+                            <ul class="list-unstyled">
+                                <li class="border p-3 my-2 rounded">
+                                    <p>{{ review.comment }}</p>
+                                    <div class="text-muted small">امتیاز: {{ review.rating }}</div>
+                                </li>
+                                <li class="text-muted">هیچ نظری ثبت نشده است.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
 
+<script>
+    // Function to get CSRF token from cookies
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
 
+    const csrftoken = getCookie('csrftoken');
+
+    // Setup AJAX to include CSRF token
+    $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+            if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
+        }
+    });
+
+    // Check if button pressed
+    $(document).on('click', '#add-cart', function(e){
+        e.preventDefault();
+        var productID = $(this).val();  // Get the product ID from the button clicked
+        var quantity = $('#qty-cart').val();  // Get the selected quantity
+    
+        $.ajax({
+            type: 'POST',
+            url: '{% url 'cart_add' %}',
+            data: {
+                product_id: productID,
+                product_qty: quantity,
+                csrfmiddlewaretoken: csrftoken,
+                action: 'post'
+            },
+            success: function(json){
+                $('#cart_quantity').text(json.qty);  // Update cart quantity on the page
+                location.reload();  // Reload the page after adding to cart
+            },
+            error: function(xhr, errmsg, err){
+                console.error(errmsg);
+            }    
+        });  
+    })
+
+    // Function to increase quantity
+    function increaseQuantity() {
+        var currentValue = parseInt($('#qty-cart').val()); // Get the current value
+        if (currentValue < 5) { // Check if the current value is less than 5 (maximum)
+            $('#qty-cart').val(currentValue + 1); // Increment the value
+        }
+    }
+
+    // Function to decrease quantity
+    function decreaseQuantity() {
+        var currentValue = parseInt($('#qty-cart').val()); // Get the current value
+        if (currentValue > 1) { // Check if the current value is greater than 1 (minimum)
+            $('#qty-cart').val(currentValue - 1); // Decrement the value
+        }
+    }
+
+    // show more and less
+    document.addEventListener('DOMContentLoaded', function () {
+        var showMoreButton = document.querySelector('.show-more');
+        var showLessButton = document.querySelector('.show-less');
+
+        showMoreButton.addEventListener('click', function () {
+            document.getElementById('product-description').style.display = 'none';
+            document.getElementById('full-description').style.display = 'block';
+        });
+
+        showLessButton.addEventListener('click', function () {
+            document.getElementById('product-description').style.display = 'block';
+            document.getElementById('full-description').style.display = 'none';
+        });
+    });
+</script>
 
 
 {% endblock %}
